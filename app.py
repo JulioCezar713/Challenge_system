@@ -11,7 +11,7 @@ from telas.quiz_ao_vivo import tela_quiz_ao_vivo
 from telas.batalha_de_equipes import tela_batalha_de_equipes
 
 from telas.mini_provas import tela_mini_provas
-from telas.votos import tela_votos
+from telas.votacao import tela_votacao
 
 from telas.desafios import tela_desafios
 
