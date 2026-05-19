@@ -47,7 +47,7 @@ def mostrar_menu():
             key="menu_miniprovas"
         ):
 
-            st.session_state.pagina = "quiz_ao_vivo"
+            st.session_state.pagina = "mini_provas"
 
             st.rerun()
 
