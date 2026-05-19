@@ -8,43 +8,6 @@ Observação: Em cada commit, comentar o que foi feito e colocar o nome dos part
 
 
 COMO A MAIN ESTÁ ORGANIZADA:
-sistema_de_desafios/
-│
-├── app.py
-├── requirements.txt
-│
-├── .streamlit/
-│   └── secrets.toml
-│
-├── database/
-│   ├── __init__.py
-│   └── conexao.py
-│
-├── services/
-│   ├── __init__.py
-│   ├── auth_service.py
-│   ├── desafio_service.py
-│   ├── voto_service.py
-│   └── notificacao_service.py
-│
-├── telas/
-│   ├── __init__.py
-│   ├── login.py
-│   ├── cadastro.py
-│   ├── home.py
-│   ├── desafios.py
-│   ├── votacao.py
-│   ├── mini_provas.py
-│   └── admin.py
-│
-├── utils/
-│   ├── __init__.py
-│   ├── session.py
-│   └── permissao.py
-│
-└── components/
-    ├── __init__.py
-    └── navbar.py
 
 #app.py
 É o arquivo que o Streamlit executa quando você roda. Só vai aparecer no streamlit se você colocar/chamar seu código aqui.
