@@ -3,21 +3,14 @@ from database.conexao import supabase
 
 def listar_desafios_votacao():
 
-    return [
-        {
-            "id": 1,
-            "titulo": "Teste de Voto1",
-            "descricao": "Apresentação teste 1",
-            "prazo": "2026-12-31"
-        },
+    resposta = (
+        supabase
+        .table("tela_desafio")
+        .select("*")
+        .execute()
+    )
 
-        {
-            "id": 2,
-            "titulo": "Teste de Voto2",
-            "descricao": "Apresentação teste 2",
-            "prazo": "2026-12-31"
-        }
-    ]
+    return resposta.data
 
 
 def buscar_voto_usuario(usuario, desafio):
@@ -40,16 +33,7 @@ def buscar_voto_usuario(usuario, desafio):
 
 def registrar_voto(usuario, desafio, voto):
 
-    verificar = buscar_voto_usuario(
-        usuario,
-        desafio
-    )
-
-    if verificar:
-
-        return False
-
-    (
+    return (
         supabase
         .table("votos")
         .insert({
@@ -60,18 +44,27 @@ def registrar_voto(usuario, desafio, voto):
         .execute()
     )
 
-    return True
 
+def atualizar_voto(voto_id, novo_voto):
 
-def atualizar_voto(id_voto, novo_voto):
-
-    (
+    return (
         supabase
         .table("votos")
         .update({
             "voto": novo_voto
         })
-        .eq("id", id_voto)
+        .eq("id", voto_id)
+        .execute()
+    )
+
+
+def deletar_voto(voto_id):
+
+    return (
+        supabase
+        .table("votos")
+        .delete()
+        .eq("id", voto_id)
         .execute()
     )
 
