@@ -56,7 +56,7 @@ elif st.session_state.pagina == "mini_provas":
     tela_mini_provas()
 
 elif st.session_state.pagina == "quiz_ao_vivo":
-    quiz_ao_vivo()
+    tela_quiz_ao_vivo()
 
 elif st.session_state.pagina == "batalha_de_equipes":
-    batalha_de_equipes()
+    tela_batalha_de_equipes()
