@@ -33,7 +33,16 @@ def buscar_voto_usuario(usuario, desafio):
 
 def registrar_voto(usuario, desafio, voto):
 
-    return (
+    voto_existente = buscar_voto_usuario(
+        usuario,
+        desafio
+    )
+
+    if voto_existente:
+
+        return False
+
+    (
         supabase
         .table("votos")
         .insert({
@@ -44,10 +53,12 @@ def registrar_voto(usuario, desafio, voto):
         .execute()
     )
 
+    return True
+
 
 def atualizar_voto(voto_id, novo_voto):
 
-    return (
+    (
         supabase
         .table("votos")
         .update({
@@ -60,7 +71,7 @@ def atualizar_voto(voto_id, novo_voto):
 
 def deletar_voto(voto_id):
 
-    return (
+    (
         supabase
         .table("votos")
         .delete()
