@@ -157,7 +157,7 @@ def tela_votacao():
             )
 
             
-::contentReference[oaicite:0]{index=0}
+st.bar_chart(contagem)
 
 
             st.write(
