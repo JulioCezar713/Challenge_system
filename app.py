@@ -50,6 +50,9 @@ elif st.session_state.pagina == "desafios":
 elif st.session_state.pagina == "votacao":
     tela_votacao()
 
+elif st.session_state.pagina == "voto":
+    tela_voto()
+
 elif st.session_state.pagina == "mini_provas":
     tela_mini_provas()
 
