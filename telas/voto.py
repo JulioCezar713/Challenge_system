@@ -24,7 +24,9 @@ def tela_voto():
         f"Prazo: {desafio['prazo']}"
     )
 
-    if st.button("Voltar"):
+    if st.button(
+        "Voltar para desafios"
+    ):
 
         st.session_state.pagina = "votacao"
 
@@ -51,7 +53,9 @@ def tela_voto():
             f"Seu voto atual: {voto_existente['voto']}"
         )
 
-        if st.button("Editar voto"):
+        if st.button(
+            "Editar voto"
+        ):
 
             st.session_state.editando_voto = True
 
@@ -79,7 +83,9 @@ def tela_voto():
 
             with col1:
 
-                if st.button("Salvar edição"):
+                if st.button(
+                    "Salvar edição"
+                ):
 
                     atualizar_voto(
                         voto_existente["id"],
@@ -96,7 +102,9 @@ def tela_voto():
 
             with col2:
 
-                if st.button("Excluir voto"):
+                if st.button(
+                    "Excluir voto"
+                ):
 
                     deletar_voto(
                         voto_existente["id"]
@@ -112,7 +120,9 @@ def tela_voto():
 
         else:
 
-            if st.button("Enviar voto"):
+            if st.button(
+                "Enviar voto"
+            ):
 
                 registrar_voto(
                     usuario["email"],
@@ -128,14 +138,21 @@ def tela_voto():
 
     st.divider()
 
-    if st.button("Visualizar resultados"):
+    if "mostrar_resultado" not in st.session_state:
 
-        st.session_state.mostrar_resultado = True
+        st.session_state.mostrar_resultado = False
 
-    if st.session_state.get(
-        "mostrar_resultado",
-        False
+    if st.button(
+        "Mostrar / Ocultar resultados"
     ):
+
+        st.session_state.mostrar_resultado = (
+            not st.session_state.mostrar_resultado
+        )
+
+        st.rerun()
+
+    if st.session_state.mostrar_resultado:
 
         votos = listar_votos_desafio(
             desafio["titulo"]
@@ -152,9 +169,13 @@ def tela_voto():
                 fill_value=0
             )
 
-            st.subheader("Resultado")
+            st.subheader(
+                "Resultado"
+            )
 
-            st.bar_chart(contagem)
+            st.bar_chart(
+                contagem
+            )
 
             st.write(
                 f"Total de votos: {len(df)}"
@@ -169,29 +190,73 @@ def tela_voto():
                 st.divider()
 
                 st.subheader(
-                    "Lista de votos"
+                    "Gerenciar votos"
                 )
 
-                for voto_item in votos:
+                filtro = st.selectbox(
+                    "Filtrar votos",
+                    [
+                        "Todos",
+                        "Bom",
+                        "Regular",
+                        "Ruim"
+                    ]
+                )
 
-                    with st.container(border=True):
+                votos_filtrados = votos
 
-                        st.write(
-                            f"Aluno: {voto_item['usuario']}"
+                if filtro != "Todos":
+
+                    votos_filtrados = [
+                        v for v in votos
+                        if v["voto"] == filtro
+                    ]
+
+                if votos_filtrados:
+
+                    col1, col2, col3, col4 = st.columns(
+                        [3, 2, 2, 2]
+                    )
+
+                    with col1:
+                        st.write("Usuário")
+
+                    with col2:
+                        st.write("Nota")
+
+                    with col3:
+                        st.write("Salvar")
+
+                    with col4:
+                        st.write("Excluir")
+
+                    st.divider()
+
+                    for voto_item in votos_filtrados:
+
+                        col1, col2, col3, col4 = st.columns(
+                            [3, 2, 2, 2]
                         )
-
-                        novo_voto = st.selectbox(
-                            "Nota",
-                            opcoes,
-                            index=opcoes.index(
-                                voto_item["voto"]
-                            ),
-                            key=f"select_{voto_item['id']}"
-                        )
-
-                        col1, col2 = st.columns(2)
 
                         with col1:
+
+                            st.write(
+                                voto_item["usuario"]
+                            )
+
+                        with col2:
+
+                            novo_voto = st.selectbox(
+                                "Nota",
+                                opcoes,
+                                index=opcoes.index(
+                                    voto_item["voto"]
+                                ),
+                                key=f"select_{voto_item['id']}",
+                                label_visibility="collapsed"
+                            )
+
+                        with col3:
 
                             if st.button(
                                 "Salvar",
@@ -204,12 +269,12 @@ def tela_voto():
                                 )
 
                                 st.success(
-                                    "Voto atualizado"
+                                    "Atualizado"
                                 )
 
                                 st.rerun()
 
-                        with col2:
+                        with col4:
 
                             if st.button(
                                 "Excluir",
@@ -221,10 +286,16 @@ def tela_voto():
                                 )
 
                                 st.success(
-                                    "Voto excluído"
+                                    "Excluído"
                                 )
 
                                 st.rerun()
+
+                else:
+
+                    st.info(
+                        "Nenhum voto encontrado"
+                    )
 
         else:
 
