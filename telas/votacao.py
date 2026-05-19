@@ -156,9 +156,7 @@ def tela_votacao():
                 "Resultado"
             )
 
-            
 st.bar_chart(contagem)
-
 
             st.write(
                 contagem
