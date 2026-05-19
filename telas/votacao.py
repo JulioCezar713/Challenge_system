@@ -52,6 +52,4 @@ def tela_votacao():
                 st.session_state.pagina = "voto"
 
                 st.rerun()
-        st.info(
-            "Nenhum voto registrado"
         )
