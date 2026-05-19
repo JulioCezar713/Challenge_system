@@ -4,10 +4,12 @@ import pandas as pd
 from services.votacao_service import (
     listar_desafios_votacao,
     registrar_voto,
-    listar_votos_desafio,
     buscar_voto_usuario,
-    atualizar_voto
+    atualizar_voto,
+    listar_votos_desafio,
+    deletar_voto
 )
+
 
 def tela_votacao():
 
@@ -17,112 +19,102 @@ def tela_votacao():
 
     desafios = listar_desafios_votacao()
 
-    if "desafio_selecionado" not in st.session_state:
+    if not desafios:
 
-        st.session_state.desafio_selecionado = None
-
-    # LISTA DE DESAFIOS
-    if st.session_state.desafio_selecionado is None:
-
-        st.subheader(
-            "Desafios disponíveis"
+        st.warning(
+            "Nenhum desafio disponível para votação"
         )
 
-        for desafio in desafios:
+        return
 
-            with st.container(border=True):
+    st.subheader(
+        "Desafios disponíveis"
+    )
 
-                st.write(
-                    desafio["titulo"]
-                )
+    for desafio in desafios:
 
-                if st.button(
-                    "Abrir",
-                    key=f"abrir_{desafio['id']}"
-                ):
+        with st.container(border=True):
 
-                    st.session_state.desafio_selecionado = desafio
+            st.write(
+                f"### {desafio['titulo']}"
+            )
 
-                    st.rerun()
-
-    # TELA DO DESAFIO
-    else:
-
-        desafio = st.session_state.desafio_selecionado
-
-        if st.button("Voltar"):
-
-            st.session_state.desafio_selecionado = None
-
-            st.rerun()
-
-        st.subheader(
-            desafio["titulo"]
-        )
-
-        st.write(
-            desafio["descricao"]
-        )
-
-        st.write(
-            f"Prazo: {desafio['prazo']}"
-        )
-
-        voto_usuario = buscar_voto_usuario(
-            usuario["email"],
-            desafio["titulo"]
-        )
-
-        st.divider()
-
-        # USUÁRIO AINDA NÃO VOTOU
-        if not voto_usuario:
-
-            voto = st.radio(
-                "Escolha seu voto",
-                ["Bom", "Regular", "Ruim"]
+            st.write(
+                f"Prazo: {desafio['prazo']}"
             )
 
             if st.button(
-                "Enviar voto"
+                "Abrir votação",
+                key=f"abrir_{desafio['id']}"
             ):
 
-                registrar_voto(
-                    usuario["email"],
-                    desafio["titulo"],
-                    voto
-                )
-
-                st.success(
-                    "Voto registrado"
-                )
+                st.session_state.desafio_votacao = desafio
 
                 st.rerun()
 
-        # USUÁRIO JÁ VOTOU
-        else:
+    if "desafio_votacao" not in st.session_state:
+
+        return
+
+    desafio = st.session_state.desafio_votacao
+
+    st.divider()
+
+    st.subheader(
+        f"Votando em: {desafio['titulo']}"
+    )
+
+    voto_existente = buscar_voto_usuario(
+        usuario["email"],
+        desafio["titulo"]
+    )
+
+    opcoes = [
+        "Bom",
+        "Regular",
+        "Ruim"
+    ]
+
+    voto = st.radio(
+        "Escolha seu voto",
+        opcoes
+    )
+
+    if not voto_existente:
+
+        if st.button(
+            "Enviar voto"
+        ):
+
+            registrar_voto(
+                usuario["email"],
+                desafio["titulo"],
+                voto
+            )
 
             st.success(
-                f"Seu voto atual: {voto_usuario['voto']}"
+                "Voto registrado"
             )
 
-            novo_voto = st.radio(
-                "Editar voto",
-                ["Bom", "Regular", "Ruim"],
-                index=[
-                    "Bom",
-                    "Regular",
-                    "Ruim"
-                ].index(voto_usuario["voto"])
-            )
+            st.rerun()
+
+    else:
+
+        st.info(
+            f"Seu voto atual: {voto_existente['voto']}"
+        )
+
+        col1, col2 = st.columns(2)
+
+        with col1:
 
             if st.button(
-                "Salvar alteração"
+                "Atualizar voto"
             ):
 
                 atualizar_voto(
-                    voto_usuario["id"],
-                    novo_voto
+                    voto_existente["id"],
+                    voto
                 )
 
                 st.success(
@@ -131,38 +123,56 @@ def tela_votacao():
 
                 st.rerun()
 
-        st.divider()
+        with col2:
 
-        votos = listar_votos_desafio(
-            desafio["titulo"]
+            if st.button(
+                "Excluir voto"
+            ):
+
+                deletar_voto(
+                    voto_existente["id"]
+                )
+
+                st.success(
+                    "Voto removido"
+                )
+
+                st.rerun()
+
+    st.divider()
+
+    st.subheader(
+        "Resultado do desafio"
+    )
+
+    votos = listar_votos_desafio(
+        desafio["titulo"]
+    )
+
+    if votos:
+
+        df = pd.DataFrame(votos)
+
+        contagem = df["voto"].value_counts()
+
+        contagem = contagem.reindex(
+            ["Bom", "Regular", "Ruim"],
+            fill_value=0
         )
 
-        if votos:
+        st.bar_chart(contagem)
 
-            df = pd.DataFrame(votos)
+        st.write(
+            f"Total de votos: {len(df)}"
+        )
 
-            contagem = (
-                df["voto"]
-                .value_counts()
-            )
+        st.dataframe(
+            df,
+            use_container_width=True
+        )
 
-            contagem = contagem.reindex(
-                ["Bom", "Regular", "Ruim"],
-                fill_value=0
-            )
+    else:
 
-            st.subheader(
-                "Resultado"
-            )
-
-st.bar_chart(contagem)
-
-            st.write(
-                contagem
-            )
-
-        else:
-
-            st.info(
-                "Nenhum voto registrado"
-            )
+        st.info(
+            "Nenhum voto registrado"
+        )
