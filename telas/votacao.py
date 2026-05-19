@@ -2,11 +2,9 @@ import streamlit as st
 import pandas as pd
 
 from services.votacao_service import (
-
     listar_desafios_votacao,
-    salvar_voto,
-    buscar_voto_usuario,
-    listar_votos_desafio
+    registrar_voto,
+    listar_votos
 )
 
 
@@ -14,18 +12,14 @@ def tela_votacao():
 
     st.title("Votação")
 
-    usuario = (
-        st.session_state.usuario_logado
-    )
+    usuario = st.session_state.usuario_logado
 
-    desafios = (
-        listar_desafios_votacao()
-    )
+    desafios = listar_desafios_votacao()
 
     if not desafios:
 
         st.warning(
-            "Nenhum desafio disponível para votação"
+            "Nenhum desafio disponível"
         )
 
         return
@@ -42,84 +36,77 @@ def tela_votacao():
                 desafio["descricao"]
             )
 
-            voto_existente = (
-                buscar_voto_usuario(
-                    desafio["id"],
-                    usuario["id"]
-                )
+            st.write(
+                f"Nível: {desafio['nivel']}"
             )
 
-            valor_inicial = 0
+            st.write(
+                f"Prazo: {desafio['prazo']}"
+            )
 
-            opcoes = [
-                "Bom",
-                "Regular",
-                "Ruim"
-            ]
-
-            if voto_existente:
-
-                valor_inicial = (
-                    opcoes.index(
-                        voto_existente["nota"]
-                    )
-                )
-
-            nota = st.radio(
-
-                "Escolha sua nota",
-
-                opcoes,
-
-                index=valor_inicial,
-
+            voto = st.radio(
+                "Escolha seu voto",
+                ["Bom", "Regular", "Ruim"],
                 key=f"radio_{desafio['id']}"
             )
 
             if st.button(
-
-                "Salvar voto",
-
-                key=f"voto_{desafio['id']}"
+                "Enviar voto",
+                key=f"botao_{desafio['id']}"
             ):
 
-                salvar_voto(
-
-                    desafio["id"],
-                    usuario["id"],
-                    nota
+                sucesso = registrar_voto(
+                    usuario["email"],
+                    desafio["titulo"],
+                    voto
                 )
 
-                st.success(
-                    "Voto salvo"
-                )
+                if sucesso:
 
-                st.rerun()
+                    st.success(
+                        "Voto registrado"
+                    )
 
-            st.divider()
+                    st.rerun()
 
-            votos = (
-                listar_votos_desafio(
-                    desafio["id"]
-                )
-            )
+                else:
 
-            if votos:
+                    st.warning(
+                        "Você já votou neste desafio"
+                    )
 
-                df = pd.DataFrame(votos)
+    st.divider()
 
-                contagem = (
-                    df["nota"]
-                    .value_counts()
-                )
+    st.subheader(
+        "Resultado Geral"
+    )
 
-                contagem = contagem.reindex(
+    votos = listar_votos()
 
-                    ["Bom", "Regular", "Ruim"],
+    if votos:
 
-                    fill_value=0
-                )
+        df = pd.DataFrame(votos)
 
-                st.bar_chart(
-                    contagem
-                )
+        contagem = (
+            df["voto"]
+            .value_counts()
+        )
+
+        contagem = contagem.reindex(
+            ["Bom", "Regular", "Ruim"],
+            fill_value=0
+        )
+
+        st.bar_chart(contagem)
+
+        st.write(
+            "Quantidade de votos:"
+        )
+
+        st.write(contagem)
+
+    else:
+
+        st.info(
+            "Nenhum voto registrado"
+        )
