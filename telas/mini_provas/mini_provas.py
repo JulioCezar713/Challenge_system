@@ -4,8 +4,13 @@ from services.mini_prova_service import (
     listar_mini_provas
 )
 
+from utils.acessibilidade import (
+    configurar_acessibilidade
+)
 
 def tela_mini_provas():
+
+    configurar_acessibilidade()
 
     st.title("Mini Provas")
 
