@@ -1,5 +1,8 @@
 import streamlit as st
-from services.mini_prova_service import listar_mini_provas
+
+from services.mini_prova_service import (
+    listar_mini_provas
+)
 
 
 def tela_mini_provas():
@@ -8,7 +11,9 @@ def tela_mini_provas():
 
     st.button("Minha pontuação: 0")
 
-    pesquisa = st.text_input("Pesquisar")
+    pesquisa = st.text_input(
+        "Pesquisar mini prova"
+    )
 
     provas = listar_mini_provas().data
 
@@ -18,10 +23,26 @@ def tela_mini_provas():
 
             st.subheader(prova["titulo"])
 
-            st.write(prova["disciplina"])
-            st.write(prova["assunto"])
+            st.write(
+                f"Disciplina: {prova['disciplina']}"
+            )
+
+            st.write(
+                f"Assunto: {prova['assunto']}"
+            )
+
+            st.write(
+                f"Pontuação: {prova['pontos']}"
+            )
 
             if st.button(
                 f"Iniciar {prova['id']}"
             ):
-                st.session_state["mini_prova"] = prova
+
+                st.session_state[
+                    "mini_prova"
+                ] = prova
+
+                st.switch_page(
+                    "telas/mini_provas/realizar_mini_prova.py"
+                )
