@@ -67,6 +67,8 @@ st.set_page_config(
 
 iniciar_session()
 
+configurar_acessibilidade()
+
 pagina = st.session_state.pagina
 
 if st.session_state.usuario_logado:
@@ -108,21 +110,3 @@ elif st.session_state.pagina == "quiz_ao_vivo":
 
 elif st.session_state.pagina == "batalha_de_equipes":
     tela_batalha_de_equipes()
-
-
-st.set_page_config(
-    page_title="Sistema de Desafios",
-    layout="wide"
-)
-
-configurar_acessibilidade()
-
-
-if "tipo_usuario" not in st.session_state:
-    st.session_state["tipo_usuario"] = "aluno"
-
-
-st.sidebar.title("Navegação")
-    tela_mini_provas()
-
-
