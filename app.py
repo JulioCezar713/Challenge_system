@@ -54,7 +54,7 @@ elif st.session_state.pagina == "voto":
     tela_voto()
 
 elif st.session_state.pagina == "mini_provas":
-    tela_mini_provas_mini_provas()
+    tela_mini_provas()
 
 elif st.session_state.pagina == "quiz_ao_vivo":
     tela_quiz_ao_vivo()
