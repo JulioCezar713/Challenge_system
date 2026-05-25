@@ -1,66 +1,28 @@
 import streamlit as st
-    assunto = st.text_input("Assunto")
 
-    quantidade_total = st.number_input(
-        "Quantidade total de perguntas",
-        min_value=1,
-        step=1
-    )
 
-    st.subheader("Quantidade por dificuldade")
+def tela_desempenho_mini_provas():
 
-    quantidade_faceis = st.number_input(
-        "Fáceis",
-        min_value=0,
-        step=1
-    )
+    st.title("Meu Desempenho")
 
-    quantidade_medias = st.number_input(
-        "Médias",
-        min_value=0,
-        step=1
-    )
+    st.metric("Média Geral", "7.8")
 
-    quantidade_dificeis = st.number_input(
-        "Difíceis",
-        min_value=0,
-        step=1
-    )
+    st.metric("Tempo Médio", "42s")
 
-    tempo = st.number_input(
-        "Tempo em minutos",
-        min_value=1,
-        step=1
-    )
+    st.metric("Taxa de Acertos", "78%")
 
-    pontos = st.number_input(
-        "Pontuação",
-        min_value=0.1,
-        step=0.1
-    )
+    st.divider()
 
-    soma = (
-        quantidade_faceis +
-        quantidade_medias +
-        quantidade_dificeis
-    )
+    st.subheader("Disciplinas")
 
-    if soma != quantidade_total:
-
-        st.error(
-            "A soma das dificuldades deve bater com o total"
-        )
-
-    if st.button("Cadastrar Mini Prova"):
-
-        st.success(
-            "Mini prova cadastrada visualmente"
-        )
+    st.write("Matemática: 8.0")
+    st.write("Português: 7.5")
+    st.write("História: 9.0")
 
     st.divider()
 
     if st.button("Voltar"):
 
         st.switch_page(
-            "telas/mini_provas/mini_provas_professor.py"
+            "telas/mini_provas/mini_provas.py"
         )
