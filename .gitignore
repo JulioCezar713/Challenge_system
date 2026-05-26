@@ -1,0 +1,64 @@
+#  Variáveis de ambiente (chaves, tokens, etc)
+.env
+.env.*
+*.env
+
+# Ambiente virtual
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# PyCharm
+.idea/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+#  Arquivos de configuração sensíveis
+config.js
+config.json
+secrets.json
+
+# Caminhos locais / arquivos do sistema
+*.log
+*.tmp
+*.cache
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
+
+# Linux
+*~
+
+# Dependências (caso use futuramente)
+node_modules/
+
+# Arquivos de teste/local
+test/
+tests/
+*.spec.js
+
+#  IDEs e editores
+.vscode/
+.idea/
+*.swp
+
+# Build / arquivos gerados
+dist/
+build/
+out/
+
+#  Backup
+*.bak
+*.old

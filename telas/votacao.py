@@ -39,7 +39,7 @@ def tela_votacao():
             )
 
             st.write(
-                f"Prazo: {desafio['prazo']}"
+                f"Prazo: {desafio['data_limite']}"
             )
 
             if st.button(

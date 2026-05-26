@@ -1,9 +1,10 @@
 import streamlit as st
-
+from services.desafio_service import listar_desafios
 
 def tela_home():
 
     usuario = st.session_state.usuario_logado
+    desafio = listar_desafios()
 
     st.title(
         f"Bem-vindo(a), {usuario['nome']}"
@@ -14,20 +15,60 @@ def tela_home():
     st.subheader(
         "Desafios disponíveis"
     )
+    desafios = listar_desafios()
 
-    st.warning(
-        "Sistema em construção"
-    )
+    if desafios:
 
+        for desafio in desafios[:5]:
+            with st.container(border=True):
+                st.write(
+                    f" {desafio['titulo']}"
+                )
+
+                st.caption(
+                    f"Nível: {desafio['nivel']}"
+                )
+
+                st.write(
+                    desafio['descricao']
+                )
+
+                st.write(
+                    f"Prazo: {desafio['data_limite']}"
+                )
+
+    else:
+
+        if desafios:
+
+            for desafio in desafios[:5]:
+                st.write(
+                    f"🗳️ {desafio['titulo']}"
+                )
+
+        else:
+
+            st.info(
+                "Nenhum desafio disponível para voto"
+            )
     st.divider()
-
+#Votação
     st.subheader(
-        "Desafios disponíveis para votação"
+        "Votação disponíveis"
     )
 
-    st.info(
-        "Nenhum desafio disponível para voto"
-    )
+    if desafios:
+
+        for desafio in desafios[:5]:
+            st.write(
+                f" {desafio['titulo']}"
+            )
+
+    else:
+
+        st.info(
+            "Nenhum desafio disponível para voto"
+        )
 
     st.divider()
 

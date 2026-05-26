@@ -5,7 +5,7 @@ def listar_desafios_votacao():
 
     resposta = (
         supabase
-        .table("tela_desafio")
+        .table("desafios")
         .select("*")
         .execute()
     )
