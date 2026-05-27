@@ -121,6 +121,14 @@ elif st.session_state.pagina == "resultados_mini_provas":
 
     tela_resultados_mini_provas()
 
+elif st.session_state.pagina == "resultado_mini_prova":
+
+    tela_resultado_mini_prova()
+
+elif st.session_state.pagina == "desempenho_mini_provas":
+
+    tela_desempenho_mini_provas()
+
 elif st.session_state.pagina == "realizar_mini_prova":
 
     tela_realizar_mini_prova()
@@ -132,6 +140,10 @@ elif st.session_state.pagina == "cadastro_perguntas":
 elif st.session_state.pagina == "cadastro_mini_provas":
 
     tela_cadastro_mini_provas()
+
+elif st.session_state.pagina == "notificacoes_mini_provas":
+
+    tela_notificacoes_mini_provas()
 
 elif st.session_state.pagina == "solicitacoes_reabertura":
 
