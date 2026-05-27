@@ -14,3 +14,9 @@ def iniciar_session():
 
     if "alto_contraste" not in st.session_state:
         st.session_state.alto_contraste = False
+        
+     if "batalha_sub_pagina" not in st.session_state:
+        st.session_state.batalha_sub_pagina = "hub"
+
+    if "batalha_selecionada_id" not in st.session_state:
+        st.session_state.batalha_selecionada_id = None
