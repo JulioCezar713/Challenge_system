@@ -43,3 +43,55 @@ CREATE TABLE votos (
     criado_em TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE (resposta_id, usuario_id)
 );
+
+-- ==========================================
+-- BATALHA DE EQUIPES
+-- ==========================================
+
+CREATE TABLE times (
+    id SERIAL PRIMARY KEY,
+    nome TEXT NOT NULL,
+    criador_id INT REFERENCES usuarios(id),
+    criado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE membros_time (
+    id SERIAL PRIMARY KEY,
+    time_id INT REFERENCES times(id) ON DELETE CASCADE,
+    usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE,
+    papel TEXT DEFAULT 'membro',  -- 'lider', 'estrategista', 'apoio', 'membro'
+    UNIQUE (time_id, usuario_id)
+);
+
+CREATE TABLE batalhas (
+    id SERIAL PRIMARY KEY,
+    titulo TEXT NOT NULL,
+    descricao TEXT,
+    criador_id INT REFERENCES usuarios(id),
+    time_a_id INT REFERENCES times(id),
+    time_b_id INT REFERENCES times(id),
+    rodadas_total INT DEFAULT 3,
+    tempo_rodada_min INT DEFAULT 10,
+    status TEXT DEFAULT 'aguardando',  -- 'aguardando', 'em_andamento', 'pausada', 'encerrada'
+    rodada_atual INT DEFAULT 0,
+    criado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE pontuacoes_batalha (
+    id SERIAL PRIMARY KEY,
+    batalha_id INT REFERENCES batalhas(id) ON DELETE CASCADE,
+    time_id INT REFERENCES times(id),
+    rodada INT NOT NULL,
+    pontos INT NOT NULL,
+    motivo TEXT,
+    registrado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE contribuicoes_batalha (
+    id SERIAL PRIMARY KEY,
+    batalha_id INT REFERENCES batalhas(id) ON DELETE CASCADE,
+    usuario_id INT REFERENCES usuarios(id),
+    pontos INT DEFAULT 0,
+    descricao TEXT,
+    registrado_em TIMESTAMPTZ DEFAULT NOW()
+);
